@@ -5,7 +5,7 @@
 
 DROP DATABASE IF EXISTS usal37_agence;
 
-CREATE DATABASE usal37_agence DEFAULT CHARACTER SET 'utf8';
+CREATE DATABASE usal37_agence DEFAULT CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci';
 
 USE usal37_agence;
 
@@ -35,8 +35,42 @@ CREATE TABLE trips
     trip_overview TEXT NOT NULL,
     trip_description MEDIUMTEXT,
     city_code INT NOT NULL,
-    PRIMARY KEY (trip_code)
+    PRIMARY KEY (trip_code),
+    INDEX (trip_start)
 );
+
+CREATE TABLE themes
+( 
+	theme_code INT AUTO_INCREMENT,
+    theme_name VARCHAR(32) NOT NULL UNIQUE,
+    theme_description MEDIUMTEXT,
+    PRIMARY KEY (theme_code)
+);
+
+CREATE TABLE services
+(
+	service_code INT AUTO_INCREMENT,
+    service_name VARCHAR(32) NOT NULL UNIQUE,
+    service_description TEXT,
+    service_score TINYINT NOT NULL,
+    service_commentaire VARCHAR(255),
+    PRIMARY KEY (service_code) 
+);
+
+CREATE TABLE trips_themes
+(
+	trip_code INT,
+    theme_code INT,
+    PRIMARY KEY (trip_code, theme_code)
+);
+
+CREATE TABLE trips_services
+(
+	trip_code INT,
+    service_code INT,
+    PRIMARY KEY (trip_code, service_code)
+);
+
 /*
 TINYINT = 255 valeurs (-128 à +127)
 SMALLINT = 65000 valeurs (-32000 à +32000)
@@ -73,6 +107,19 @@ ADD
 FOREIGN KEY (country_code) REFERENCES countries(country_code);
 */
 
+ALTER TABLE trips_themes
+ADD CONSTRAINT fk_trips_themes1
+FOREIGN KEY (trip_code) REFERENCES trips(trip_code),
+ADD CONSTRAINT fk_trips_themes2
+FOREIGN KEY (theme_code) REFERENCES themes(theme_code);
+
+
+ALTER TABLE trips_services
+ADD CONSTRAINT fk_trips_services1
+FOREIGN KEY (trip_code) REFERENCES trips(trip_code),
+ADD CONSTRAINT fk_trips_services2
+FOREIGN KEY (service_code) REFERENCES services(service_code);
+
 ALTER TABLE cities
 ADD CONSTRAINT fk_cities_countries
 FOREIGN KEY (country_code) REFERENCES coutries(country_code);
@@ -80,6 +127,9 @@ FOREIGN KEY (country_code) REFERENCES coutries(country_code);
 ALTER TABLE trips
 ADD CONSTRAINt fk_trips_cities
 FOREIGN KEY (city_code) REFERENCES cities(city_code);
+
+
+
 
 INSERT INTO countries
 (country_code, country_name)
@@ -104,6 +154,33 @@ VALUE
 ('Chernobyl', 'UA'),
 ('Édimbourg', 'GB'),
 ('Marrakech', 'MA');
+
+INSERT INTO themes
+(theme_name)
+VALUES
+('Montagne'),
+('Plage'),
+('Ski'),
+('Balnéo'),
+('Aventure');
+
+INSERT INTO trips_themes
+(trip_code, theme_code)
+VALUES
+(1, 2),
+(1, 3),
+(3, 2);
+
+INSERT INTO services
+(service_name) 
+VALUES
+('All inclusive'),
+('Coach sportif'),
+('Service d\'étage'),
+('SPA'),
+('Restaurant 4*');
+
+
 
 INSERT INTO trips
 (

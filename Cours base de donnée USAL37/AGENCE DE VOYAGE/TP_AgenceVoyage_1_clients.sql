@@ -9,60 +9,39 @@
 
 use usal37_agence;
 
-CREATE TABLE clients
+CREATE table sales 
 (
-	client_id INT AUTO_INCREMENT,
-    client_lastname VARCHAR(32) NOT NULL,
-    client_firstname VARCHAR(32) NOT NULL,
-    client_email VARCHAR(128) NOT NULL,
-    client_phone VARCHAR(16) NOT NULL,
-    client_added DATE NOT NULL,
-    client_password VARCHAR(60) NOT NULL,
-    com_code VARCHAR(5) NOT NULL,
-    PRIMARY KEY (client_id)
+	com_code CHAR(5) PRIMARY KEY,
+    com_name VARCHAR(64),
+    com_password CHAR(60)
 );
 
-CREATE TABLE sales
+INSERT INTO sales 
+(com_code, com_name, com_password) 
+VALUES 
+('AB201', 'Berthier Aline', 'azerty'),
+('NJ247', 'Neymar Jean', 'azerty'),
+('PJ714', 'Paute Jessie', 'azerty'),
+('PM654', 'Poglio Marcel', 'azerty'),
+('YT023', 'Yoyo Tata', 'azerty');
+
+
+CREATE TABLE clients 
 (
-	com_code VARCHAR(5),
-    com_name VARCHAR(64) NOT NULL,
-    com_password VARCHAR(60) NOT NULL,
-    PRIMARY KEY (com_code)
+	client_id INT PRIMARY KEY AUTO_INCREMENT,
+    client_lastname VARCHAR(32),
+    client_firstname VARCHAR(32),
+    client_email VARCHAR(128),
+    client_phone CHAR(16),
+    client_added DATE,
+    client_password CHAR(60)
 );
 
-ALTER TABLE clients
-ADD CONSTRAINT fk_clients_sales
-FOREIGN KEY (com_code) REFERENCES sales (com_code);
-
-INSERT INTO clients
-(
-    client_lastname, 
-	client_firstname,
-	client_email,
-	client_phone,
-	client_added,
-    client_password,
-    com_code
-)
-VALUES
-('Honnet', 'Andréas',	'honnet.andréas@sardoche.ctsur',	'06 06 06 06 06', 	'2020-11-08',	'azerty', 	'TOTO1'),
-('Dupont', 'Arnold',	'dupont.arnold@gmail.com',			'06 01 01 01 01', 	'2020-08-28',	'azerto',	'TOTO2'),
-('Castex', 'Jean',		'castex.jean@outlook.con',			'06 12 13 37 02', 	'2020-07-09',	'azerty',	'TOTO3'),
-('Jaeger', 'Eren',		'jaeger.eren@paradis.net',			'07 09 11 13 15', 	'2020-03-16',	'azerty', 	'TOTO4'),
-('Dragon', 'Luffy',		'dragon.luffy@sabaody.com',			'06 55 55 55 55', 	'2020-12-10',	'azerty',	'TOTO5');
-
-INSERT INTO sales
-(
-	com_code, 
-	com_name, 
-	com_password
-)
-VALUES
-('TOTO1', 'Monsieur Yi', 				'2569525456256'),
-('TOTO2', 'Titouan Asperge', 			'dqsfgbnhgdfsqsfsghfbf'),
-('TOTO3', 'Rachmaninov Sergeï', 		'qdsrgfSQRGSRQGv25'),
-('TOTO4', 'Shimada Genji', 				'2569525456256'),
-('TOTO5', 'Ahri Potter', 				'qsfdfgdhjkjjhtfsthgjkeqhbthbbvcfcv25');
-
-SELECT * FROM clients 
-JOIN sales ON sales.com_code = clients.com_code;
+INSERT INTO clients 
+(client_lastname, client_firstname, client_email, client_phone, client_added, client_password) 
+VALUES 
+('Dupont', 'Ernest', 'a@a.fr', '0102030405', '2020-12-10', 'azerty'), 
+('Dupond', 'Louis', 'b@b.fr', '0203040506', '2020-12-10', 'azerty'), 
+('Martin', 'Léo', 'c@c.fr', '0312345678', '2020-12-10', 'azerty'), 
+('Devoldère', 'Mickaël', 'd@d.fr', '0678963214', '2020-12-10', 'azerty'), 
+('Ben', 'Joe', 'e@e.fr', '0698741235', '2020-12-10', 'azerty');
